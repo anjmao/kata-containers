@@ -53,31 +53,18 @@ const acrnDevice = "/dev/acrn_hsm"
 // Until the support is available, directly use the value instead
 // of macros.
 // https://github.com/kata-containers/runtime/issues/1784
-const ioctl_ACRN_CREATE_VM = 0xC030A210 //nolint
-const ioctl_ACRN_PAUSE_VM = 0xA213      //nolint
-const ioctl_ACRN_DESTROY_VM = 0xA211    //nolint
+const ioctl_ACRN_CREATE_VM = 0x43000010  //nolint
+const ioctl_ACRN_DESTROY_VM = 0x43000011 //nolint
 
-type acrn_vm_creation struct { //nolint
-	vmid         uint16 //nolint
-	reserved0    uint16 //nolint
-	vcpu_num     uint16 //nolint
-	reserved1    uint16 //nolint
-	name         [16]uint8
-	vm_flag      uint64 //nolint
-	ioreq_buf    uint64 //nolint
-	cpu_affinity uint64 //nolint
-}
-
-var io_request_page [4096]byte
-
-type acrn_io_request struct { // nolint
-	io_type            uint32     // nolint
-	completion_polling uint32     // nolint
-	reserved0          [14]uint32 // nolint
-	data               [8]uint64  // nolint
-	reserved1          uint32     // nolint
-	kernel_handled     uint32     // nolint
-	processed          uint32     // nolint
+type acrn_create_vm struct { //nolint
+	vmid      uint16 //nolint
+	reserved0 uint16 //nolint
+	vcpu_num  uint16 //nolint
+	reserved1 uint16 //nolint
+	uuid      [16]uint8
+	vm_flag   uint64    //nolint
+	req_buf   uint64    //nolint
+	reserved2 [16]uint8 //nolint
 }
 
 // cpuType save the CPU type

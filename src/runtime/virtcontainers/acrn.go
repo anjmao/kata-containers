@@ -55,10 +55,26 @@ type Acrn struct {
 	state      AcrnState
 }
 
+const acrnDevice = "/dev/acrn_vhm"
+
+// ioctl_ACRN_CREATE_VM is the IOCTL to create VM in ACRN.
+// Current Linux mainstream kernel doesn't have support for ACRN.
+// Due to this several macros are not defined in Linux headers.
+// Until the support is available, directly use the value instead
+// of macros.
+// https://github.com/kata-containers/runtime/issues/1784
+const ioctl_ACRN_GET_PLATFORM_INFO = 0x43000003 //nolint
+
 const (
 	acrnConsoleSocket          = "console.sock"
 	acrnStopSandboxTimeoutSecs = 15
 )
+
+// UUIDBusy marks a particular UUID as busy
+const UUIDBusy = 1
+
+// UUIDFree marks a particular UUID as free
+const UUIDFree = 0
 
 // agnostic list of kernel parameters
 var acrnDefaultKernelParameters = []Param{
