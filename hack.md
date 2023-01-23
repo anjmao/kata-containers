@@ -63,6 +63,13 @@ kubectl apply -f ./tools/packaging/kata-deploy/examples/test-deploy-kata-clh.yam
 
 TODO: Check https://github.com/kata-containers/kata-containers/issues/4412
 
+### List pci devices
+
+```
+yum install pciutils
+lspci
+```
+
 
 ### Enable debug logs
 
@@ -81,4 +88,37 @@ Access logs:
 
 ```sh
 journalctl -f -u containerd
+```
+
+```
+# Kata container volume fs
+dd if=/dev/zero of=/var/www/html/out bs=10k count=100k
+1048576000 bytes (1.0 GB, 1000 MiB) copied, 4.05981 s, 258 MB/s
+
+
+# Native container volume fs
+dd if=/dev/zero of=/var/www/html/out bs=10k count=100k
+1048576000 bytes (1.0 GB, 1000 MiB) copied, 0.51914 s, 2.0 GB/s
+
+
+# Native container Block volume with manual mount inside container
+dd if=/dev/zero of=/var/www/html/out bs=10k count=100k
+1048576000 bytes (1.0 GB, 1000 MiB) copied, 0.53927 s, 1.9 GB/s
+
+# Kata containers block volume with manual mount inside container
+dd if=/dev/zero of=/var/www/html/out bs=10k count=100k
+1048576000 bytes (1.0 GB, 1000 MiB) copied, 0.646092 s, 1.6 GB/s
+```
+
+### Get vm device info
+```
+curl --unix-socket //run/vc/vm/<id>/clh-api.sock -X GET 'http://localhost/api/v1/vm.info' -H 'Accept: application/json' | jq
+```
+
+### Create filesystem for block volume
+
+```
+mkfs.ext4 /dev/block
+mkdir -p /var/www/html
+mount /dev/block /var/www/html
 ```

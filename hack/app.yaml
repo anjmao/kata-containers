@@ -5,6 +5,7 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
+#  volumeMode: Block
   resources:
     requests:
       storage: 10Gi
@@ -24,18 +25,17 @@ spec:
     spec:
       runtimeClassName: kata-clh
       containers:
-        - name: init
-          image: ubuntu
-          volumeMounts:
-            - mountPath: /usr/bin
-              name: hostbin
         - name: myfrontend
           image: nginx
+          securityContext:
+            privileged: true
           volumeMounts:
             - mountPath: "/var/www/html"
               name: mypd
+#          volumeDevices:
+#            - devicePath: /dev/block
+#              name: mypd
       volumes:
         - name: mypd
           persistentVolumeClaim:
             claimName: nginx
-        - name:
