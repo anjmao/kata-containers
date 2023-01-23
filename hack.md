@@ -10,6 +10,7 @@ sudo make DEBUG=true USE_DOCKER=true DISTRO=ubuntu EXTRA_PKGS="bash coreutils cu
 popd
 ```
 
+
 ###  Prepare eks cluster.
 
 ```sh
