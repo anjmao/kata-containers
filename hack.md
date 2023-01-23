@@ -5,10 +5,8 @@
 
 set -ex
 
-export EXTRA_PKGS="bash coreutils"
-
 pushd ./tools/osbuilder
-sudo make USE_DOCKER=true DISTRO=ubuntu rootfs image
+sudo make DEBUG=true USE_DOCKER=true DISTRO=ubuntu EXTRA_PKGS="bash coreutils curl" rootfs image
 popd
 ```
 
@@ -17,6 +15,17 @@ popd
 ```sh
 eksctl create cluster am-kata-eks --region=us-east-2 -N 1 --ssh-access
 eksctl utils write-kubeconfig -c=am-kata-eks --region=us-east-2
+eksctl create iamserviceaccount \
+--name ebs-csi-controller-sa \
+--region=us-east-2 \
+--namespace kube-system \
+--cluster am-kata-eks \
+--attach-policy-arn arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy \
+--approve \
+--role-only \
+--role-name AmazonEKS_EBS_CSI_DriverRole
+
+eksctl create addon --name aws-ebs-csi-driver --region=us-east-2 --cluster am-kata-eks --service-account-role-arn arn:aws:iam::<account-id>:role/AmazonEKS_EBS_CSI_DriverRole --force
 ```
 
 ###  Add spot metal node via CAST AI API. 

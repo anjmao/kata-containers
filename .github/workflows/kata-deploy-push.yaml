@@ -36,6 +36,7 @@ jobs:
       - name: Build ${{ matrix.asset }}
         if: ${{ !contains(github.event.pull_request.labels.*.name, 'force-skip-ci') }}
         run: |
+          export EXTRA_PKGS="bash coreutils curl"
           make "${KATA_ASSET}-tarball"
           build_dir=$(readlink -f build)
           # store-artifact does not work with symlink
