@@ -8,8 +8,7 @@ set -ex
 export EXTRA_PKGS="bash coreutils"
 
 pushd ./tools/osbuilder
-make USE_DOCKER=true DISTRO=ubuntu AGENT_INIT=yes rootfs
-make USE_DOCKER=true AGENT_INIT=yes image
+sudo make USE_DOCKER=true DISTRO=ubuntu rootfs image
 popd
 ```
 
@@ -60,6 +59,7 @@ TODO: Check https://github.com/kata-containers/kata-containers/issues/4412
 ```sh
 sed -i -e 's/^# *\(enable_debug\).*=.*$/\1 = true/g' /opt/kata/share/defaults/kata-containers/configuration-clh.toml
 sed -i -e 's/^kernel_params = "\(.*\)"/kernel_params = "\1 agent.log=debug initcall_debug"/g' /opt/kata/share/defaults/kata-containers/configuration-clh.toml
+sed -i -e 's/^kernel_params = "\(.*\)"/kernel_params = "\1 agent.debug_console_vport=1026"/g' /opt/kata/share/defaults/kata-containers/configuration-clh.toml
 cat <<EOF | tee -a "/etc/containerd/config.toml"
 [debug]
 level = "debug"
