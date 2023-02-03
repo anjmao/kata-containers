@@ -1,0 +1,33 @@
+fullnameOverride: grafana
+adminPassword: admin
+useStatefulSet: true
+persistence:
+  enabled: true
+  type: statefulset
+  size: 2Gi
+grafana.ini:
+  server:
+    serve_from_sub_path: false
+    root_url: /
+  analytics:
+    check_for_updates: false
+  grafana_net:
+    url: https://grafana.net
+  log:
+    mode: console
+  auth.anonymous:
+    enabled: true
+    org_name: Main Org.
+    org_role: Admin
+  users:
+    default_theme: light
+
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+      - name: Prometheus
+        type: prometheus
+        url: http://prom-prometheus-server.hack.svc.cluster.local
+        access: proxy
+        isDefault: true

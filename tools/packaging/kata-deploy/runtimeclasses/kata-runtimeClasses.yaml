@@ -20,7 +20,7 @@ handler: kata-clh
 overhead:
     podFixed:
         memory: "130Mi"
-        cpu: "250m"
+        cpu: "50m"
 scheduling:
   nodeSelector:
     katacontainers.io/kata-runtime: "true"

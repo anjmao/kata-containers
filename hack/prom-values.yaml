@@ -1,0 +1,23 @@
+alertmanager:
+  enabled: false
+
+prometheus-pushgateway:
+  enabled: false
+
+prometheus-node-exporter:
+  enabled: true
+
+kube-state-metrics:
+  enabled: true
+
+server:
+  global:
+    scrape_interval: 5s
+    scrape_timeout: 3s
+  extraFlags:
+    - web.enable-lifecycle
+    - web.enable-remote-write-receiver
+  resources:
+    requests:
+      cpu: 100m
+      memory: 512Mi
